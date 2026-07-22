@@ -452,8 +452,12 @@ function buildGenerated() {
         const title = titles[i % titles.length] + (i >= titles.length ? ` — ${j.name} specifics` : '')
         const instrument = instruments[Math.floor(rand() * instruments.length)]
         const r = rand()
-        // mostly green, a meaningful band of amber; reds are hand-written only
-        const status = r < 0.82 ? 'green' : 'amber'
+        // mostly green, a meaningful band of amber; reds are hand-written only.
+        // Ambers cluster where regulatory churn is (player protection,
+        // marketing, reporting) so the matrix reads calm-with-hotspots,
+        // not uniformly worried.
+        const amberRate = { player: 0.14, marketing: 0.14, reporting: 0.12, aml: 0.1 }[d.key] ?? 0.03
+        const status = r < 1 - amberRate ? 'green' : 'amber'
         const conf = rand()
         const confidence = conf < 0.8 ? 'high' : 'medium'
         const effYear = 2018 + Math.floor(rand() * 7)
